@@ -1,6 +1,6 @@
 <?php
-include 'dbConfig.php';
-require 'Slim/Slim.php';
+include '../db/db.php';
+require '../../libs/rest/Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 
 $slim_app = new \Slim\Slim();
@@ -28,7 +28,9 @@ function logout() {
 	session_start();
 	session_destroy();
 }
-
+function dd(){
+	echo "hola mundo";
+}
 function doLogin() {
 	$request = \Slim\Slim::getInstance()->request();
 	$update = json_decode($request->getBody());	
@@ -58,7 +60,7 @@ function doLogin() {
 function loadUsers() {
 	$sql = "SELECT uid as id,name,email, phone as mobile FROM customers_auth ORDER BY uid asc";
 	try {
-		$db = getDB();
+		$db = getDB('mysql');
 		$stmt = $db->query($sql);  
 		$users = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
