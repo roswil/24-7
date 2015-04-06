@@ -139,4 +139,45 @@ function editUser() {
 		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
 }
+function listaGrupos($id) {
+	$sql = "SELECT DISTINCT (gr.id_grupo) as id, gr.grupo 
+                                    FROM _bp_accesos ac   
+                                    INNER JOIN _bp_opciones op ON ac.id_opcion = op.id_opcion
+                                    INNER JOIN _bp_grupos gr ON gr.id_grupo = op.id_grupo
+                                    WHERE ac.id_rol = (SELECT id_usuario_rol FROM _bp_usuarios_roles 
+                                    WHERE id_usuario ='$id' ) and ac._estado ='A'";
+	try {
+		$db = getDB('mysql');		
+		$stmt = $db->query($sql);
+		//$stmt->bindValue(':id', $id);
+
+		//$stmt->execute();
+		$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);		
+		$db = null;
+		echo json_encode($rows);
+	} catch(PDOException $e) {
+	    echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+function listarOpciones($id) {
+	$sql = "SELECT gr.id_grupo, gr.grupo, op.id_opcion, op.opcion,                                                         
+            op.contenido, op.imagen FROM _bp_accesos ac
+            INNER JOIN _bp_opciones op  ON ac.id_opcion = op.id_opcion 
+            INNER JOIN _bp_grupos gr ON gr.id_grupo = op.id_grupo
+            WHERE ac.id_rol = (	SELECT id_usuario_rol 
+            FROM _bp_usuarios_roles
+            WHERE id_usuario_rol = '$id') AND ac._estado = 'A' 
+            and op._estado = 'A'";
+	try {
+		$db = getDB('mysql');
+		$stmt = $db->query($sql);  
+
+		$users = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$db = null;
+		echo json_encode($users);
+		
+	} catch(PDOException $e) {
+	    echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
 ?>
