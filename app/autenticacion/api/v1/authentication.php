@@ -15,22 +15,29 @@ $app->post('/login', function() use ($app) {
     $response = array();
     $db = new DbHandler();
     $password = $r->customer->password;
-    $email = $r->customer->email;
-    $user = $db->getOneRecord("select uid,name,password,email,created from customers_auth where phone='$email' or email='$email'");
-    if ($user != NULL) {
-        if(passwordHash::check_password($user['password'],$password)){
+    $email = $r->customer->email;    
+    //$user = $db->getOneRecord("select uid,name,password,email,created from customers_auth where phone='$email' or email='$email'");
+    $consulta = "SELECT us.usuario, us.clave, us.id_usuario, ro.rol
+                FROM _bp_usuarios us
+                INNER JOIN _bp_usuarios_roles ur ON ur.id_usuario = us.id_usuario
+                INNER JOIN _bp_roles ro ON ro.id_rol = ur.id_rol
+                WHERE us.usuario = '" . $email . "' and us.clave = '" . $password . "'";        
+    $user = $db->getOneRecord($consulta);    
+    if ($user != NULL) {        
+        //if(passwordHash::check_password($user['clave'],$password)){
+        if($user['clave']){            
         $response['status'] = "success";
         $response['message'] = 'Logged in successfully.';
-        $response['name'] = $user['name'];
-        $response['uid'] = $user['uid'];
-        $response['email'] = $user['email'];
-        $response['createdAt'] = $user['created'];
+        $response['name'] = $user['usuario'];
+        $response['uid'] = $user['id_usuario'];
+        //$response['email'] = $user['name'];
+        //$response['createdAt'] = $user['created'];
         if (!isset($_SESSION)) {
             session_start();
         }
-        $_SESSION['uid'] = $user['uid'];
-        $_SESSION['email'] = $email;
-        $_SESSION['name'] = $user['name'];
+        $_SESSION['uid'] = $user['id_usuario'];
+        //$_SESSION['email'] = $email;
+        $_SESSION['name'] = $user['usuario'];
         } else {
             $response['status'] = "error";
             $response['message'] = 'Login failed. Incorrect credentials';
@@ -41,6 +48,7 @@ $app->post('/login', function() use ($app) {
         }
     echoResponse(200, $response);
 });
+
 $app->post('/signUp', function() use ($app) {
     $response = array();
     $r = json_decode($app->request->getBody());
