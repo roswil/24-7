@@ -1,5 +1,12 @@
 var app = angular.module('myApp', ['ngRoute', 'ngAnimate', 'toaster']);
 
+app.controller("NavCtrl",function($scope,$http){
+	var serviceBase = '../../model/proy2_grillas_restful/cliente.php/';
+	$http.get(serviceBase + 'categories').then(function (results) {
+        $scope.categories = results.data;
+    });
+});
+
 app.config(['$routeProvider',
   function ($routeProvider) {
         $routeProvider.
