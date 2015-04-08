@@ -3,7 +3,7 @@ $app->get('/session', function() {
     $db = new DbHandler();
     $session = $db->getSession();
     $response["uid"] = $session['uid'];
-    $response["email"] = $session['email'];
+    //$response["email"] = $session['email'];
     $response["name"] = $session['name'];
     echoResponse(200, $session);
 });

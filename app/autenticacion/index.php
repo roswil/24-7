@@ -26,35 +26,38 @@
   </head>
 
   <body ng-cloak="">
-    <div class="navbar navbar-inverse navbar-fixed-top navbar-default megamenu" role="navigation">
+    <div ng-if='uid && name'>        
+      <div class="navbar navbar-inverse navbar-fixed-top navbar-default megamenu" role="navigation">
       <div class="container" ng-controller="NavCtrl">
-        <div class="col-sm-12">
-          <div class="navbar-header">
+        <div class="col-sm-12">          
+            <div class="navbar-header">
+            <BR><font size="3" color="white">USUARIO: {{name}}</font>
             <button type="button" data-toggle="collapse" data-target="#navbar-collapse-grid" class="navbar-toggle">
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
-            </button>  
+            </button> <br>                
           </div>
-          <div id="navbar-collapse-grid" class="navbar-collapse collapse">
+          <div id="navbar-collapse-grid" class="navbar-collapse collapse" ng-controller="NavCtrl">
             <ul class="nav navbar-nav">
             <li ng-repeat ="p in categories" class="dropdown megamenu-fw"><a href="#" data-toggle="dropdown" class="dropdown-toggle">{{p.grupo}}<b class="caret"></b></a>
               <ul class="dropdown-menu">
               <li class="grid-demo">
                 <div class="row">
                 <div class="col-sm-3" ng-repeat="c in p.sub_categories">
-                  <a href="#/category/{{c.id_grupo}}/{{c.description}}">{{c.opcion}}
-                </a></div>
+                  <!--<a href="#/angular/{{c.id_grupo}}/{{c.description}}">{{c.opcion}}-->
+                  <a href="#menu" id="{{c.contenido}}">{{c.opcion}}</a>
+                </div>                   
                 </div>
               </li>
               </ul>
             </li>
             </ul>
-          </div>
+          </div>             
         </div>
       </div>
     </div>
-    
+    </div>    
     <footer class="footer">
       <div >
         <div class="container" style="margin-top:20px;">
@@ -68,9 +71,6 @@
   <script src="js/angular-route.min.js"></script>
   <script src="js/angular-animate.min.js" ></script>
   <script src="js/toaster.js"></script>
-  
-  
-  
   <script src="app/app.js"></script>
   <script src="app/data.js"></script>
   <script src="app/directives.js"></script>

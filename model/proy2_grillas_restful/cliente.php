@@ -231,6 +231,7 @@ function categories() {
 	        	$subcat = array(); // temp array
 	            $subcat["id_opcion"] = $srow['id_opcion'];
 	            $subcat["opcion"] = $srow['opcion'];
+                $subcat["contenido"] = $srow['contenido'];
 	            // pushing sub category into subcategories node
 	            array_push($category["sub_categories"], $subcat);
 	        }

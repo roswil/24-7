@@ -2,10 +2,10 @@
 function getDB($base) {
 	switch ($base){
 		case "mysql":
-			$dbhost="localhost";
+			$dbhost="pdp07";
 			$dbuser="root";
 			$dbpass="";
-			$dbname="angularcode";
+			$dbname="seguridad";
 			$dbConnection = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);	
 			$dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	        break;

@@ -9,6 +9,7 @@ app.controller("NavCtrl",function($scope,$http){
 
 app.config(['$routeProvider',
   function ($routeProvider) {
+        $ruta = '../autenticacion/index.html';
         $routeProvider.
         when('/login', {
             title: 'Login',
@@ -36,6 +37,10 @@ app.config(['$routeProvider',
                 controller: 'authCtrl',
                 role: '0'
             })
+            .when('/menu', {
+			     templateUrl	: $ruta,
+                controller: 'authCtrl'
+		      })
             .otherwise({
                 redirectTo: '/login'
             });
