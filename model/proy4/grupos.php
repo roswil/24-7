@@ -10,6 +10,8 @@ $slim_app->get('/isLogin','isLogin');
 $slim_app->get('/logout','logout');
 $slim_app->get('/loadUsers','loadUsers');
 $slim_app->get('/loadGrupos','loadGrupos');
+$slim_app->get('/editGrupos/:uid','editGrupos');
+
 $slim_app->post('/newUser','newUser');
 $slim_app->post('/editUser','editUser');
 $slim_app->get('/loadEditGrupos/:eid','loadEditGrupos');
@@ -33,7 +35,7 @@ function logout() {
 
 
 function loadUsers() {
-	$sql = "SELECT uid as id,name,email, phone as mobile FROM customers_auth ORDER BY uid asc";
+	$sql = "SELECT grupo_id as id,grupo_descripcion,grupo_imagen, grupo_estado FROM sa_grupos";
 	try {
 		$db = getDB('mysql');
 		$stmt = $db->query($sql);  
@@ -46,7 +48,7 @@ function loadUsers() {
 	}
 }
 function loadGrupos() {
-	$sql = "SELECT id_grupo as id,grupo,imagen, _estado FROM _bp_grupos";
+	$sql = "SELECT grupo_id as id,grupo_descripcion,grupo_imagen, grupo_estado FROM sa_grupos";
 	try {
 		$db = getDB('mysql');
 		$stmt = $db->query($sql);  
@@ -59,12 +61,11 @@ function loadGrupos() {
 	}
 }
 
-
-
 function loadEditGrupos($eid) {
 	$sql = "SELECT grupo_id as id,grupo_descripcion,grupo_imagen, grupo_estado FROM sa_grupos WHERE grupo_id=:id";
 	try {		
-		$db = getDB();		
+		//print_r($sql);
+		$db = getDB('mysql');		
 		$stmt = $db->prepare($sql);
 		$stmt->bindValue(':id', $eid);		
 		$stmt->execute();
@@ -76,6 +77,44 @@ function loadEditGrupos($eid) {
 	}
 }
 
+function editGrupos($uid)
+{
+	$request = \Slim\Slim::getInstance()->request();
+	$produto = json_decode($request->getBody());
+	$sql = "UPDATE sa_grupos SET grupo_descripcion=:grupo_descripcion,grupo_imagen=:grupo_imagen WHERE  grupo_id=:id";
+	try {
+	$db = getDB('mysql');
+	$stmt = $db->prepare($sql);  
+	$stmt->bindValue(':id', $uid);	
+	$stmt->bindParam("grupo_descripcion",$update->grupo_descripcion);
+	$stmt->bindParam("grupo_imagen",$update->grupo_imagen);
+	$stmt->execute();
+	$db = null;
+			echo '{"status":'.$status.'}';
+		} catch(PDOException $e) {		
+			echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+		}
+
+}
+function editUser() {
+	$request = \Slim\Slim::getInstance()->request();
+	$update = json_decode($request->getBody());
+	
+	$sql = "UPDATE users SET name = :name, email = :email, mobile = :mobile WHERE id = :id";
+	try {
+		$db = getDB();
+		$stmt = $db->prepare($sql);  
+		$stmt->bindParam("name", $update->name);
+		$stmt->bindParam("email", $update->email);
+		$stmt->bindParam("mobile", $update->mobile);
+		$stmt->bindParam("id", $update->id);		
+		$status = $stmt->execute();	
+		$db = null;
+		echo '{"status":'.$status.'}';
+	} catch(PDOException $e) {		
+		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
 function deleteUser($did) {   
 	$sql = "DELETE FROM users WHERE id=:delete_id";
 	try {
@@ -111,23 +150,4 @@ function newUser() {
 }
 
 
-function editUser() {
-	$request = \Slim\Slim::getInstance()->request();
-	$update = json_decode($request->getBody());
-	
-	$sql = "UPDATE users SET name = :name, email = :email, mobile = :mobile WHERE id = :id";
-	try {
-		$db = getDB();
-		$stmt = $db->prepare($sql);  
-		$stmt->bindParam("name", $update->name);
-		$stmt->bindParam("email", $update->email);
-		$stmt->bindParam("mobile", $update->mobile);
-		$stmt->bindParam("id", $update->id);		
-		$status = $stmt->execute();	
-		$db = null;
-		echo '{"status":'.$status.'}';
-	} catch(PDOException $e) {		
-		echo '{"error":{"text":'. $e->getMessage() .'}}'; 
-	}
-}
 ?>

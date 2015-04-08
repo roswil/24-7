@@ -1,45 +1,31 @@
+<html ng-app="myApp2" ng-app lang="en" ng-controller="listCtrl">
+ <link href="../../libs/css/bootstrap.min.css" rel="stylesheet">
+ <script type="text/javascript" src="../../libs/js/jquery-2.1.1.min.js"></script>
+<script src="../../libs/js/angular.min.js"></script>
+<script language=""="JavaScript">           
+            function conMayusculas(field) {
+                field.value = field.value.toUpperCase()
+            }
+        </script>
+<script src="../../libs/js/ui-bootstrap-modal-0.10.0.min.js"></script>
 
- <div class="row">
+ <script src="../../libs/js/bootstrap.min.js"></script>
+<script src="../../libs/js/angular-route.min.js"></script>
+<script src="../../controller/proy4/app.js"></script>  
+
+
+ <div class="container">
+ <div class="row" >
     <nav class= "navbar navbar-default" role= "navigation" >
     </nav>
 
         <legend></legend> 
         <div class="form-group">
-                    <button class="btn btn-large btn-primary btn-lg"  type="submit" href="#"  data-toggle="modal" data-target="#bookmarkModal" >Nuevo Grupo
-                    </button>
+        <button class="btn btn-large btn-primary btn-lg"  type="submit" href="#"  data-toggle="modal" data-target="#bookmarkModal" >Nuevo Grupo
+        </button>
         </div>                  
     <!-- Bookmark form -->
-      <div class="modal fade" id="bookmarkModal" tabindex="-1" role="dialog" >
-        <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-              </div>
 
-               <div class="modal-body">              
-                <p>Agregar Grupos</p>
-                <div class="form-group">
-                  <label for="title">Descripcion</label>
-                  <div class="input-group">
-                    <div class="input-group-addon">
-                    </div>
-                    <input ng-model="bookmark.title" id="title" class="form-control" type="text"  onChange="conMayusculas(this)" placeholder="Descripcion">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="url">Imagen</label>
-                  <div class="input-group">
-                    <div class="input-group-addon">
-                    </div>
-                    <input ng-model="bookmark.url" id="url" class="form-control" type="url" onChange="conMayusculas(this)" placeholder="Imagen">
-                  </div>
-                </div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Guardar Cambios</button>
-              </div>
-        </div>
-      </div>
-      </div> 
         <legend>
            <div class="modal-body">
            <label for="title">Buscar</label>
@@ -59,45 +45,54 @@
                 <tr ng-repeat="data in customers | filter: query">
                     <td class="btn-lg">
                             <b>
-                                <a href="#?id={{data.id}}"  data-toggle="modal" data-target="#editGrupos"><span class="glyphicon glyphicon-pencil "></span></a> &nbsp;
+                               <a href="#" ng-click="loadGrupos(data.id)" data-toggle="modal" data-target="#bookmarkModal"><span class="glyphicon glyphicon-pencil "></span></a> &nbsp;
                                 <a href="#?id={{data.id}}"  data-toggle="modal" data-target="#bookmarkModal"><span class="glyphicon glyphicon-trash"></span></a> &nbsp;      
                             </b>
                     </td>
-                    <td>{{data.id}}</td>
-                    <td>{{data.grupo}}</td>
-                    <td>{{data.imagen}}</td>
-                    <td>{{data._estado}}</td>
+                    <td>{{::data.id}}</td>
+                    <td>{{::data.grupo_descripcion}}</td>
+                    <td>{{data.grupo_imagen}}</td>
+                    <td>{{data.grupo_estado}}</td>
                 </tr>
             </tbody>
         </table>
 
-            <div class="modal fade" id="editGrupos" tabindex="-1" role="dialog" >
-            <div class="modal-dialog">
-            <div class="modal-content">
-                <form class="form-horizontal" ng-submit="save()">
-                <input  ng-model="data.id"/>
-                <fieldset>
-                    <legend>Editar Grupos</legend>
-                    <div class="control-group">
-                        <label class="control-label" for="edit-title">Grupo</label>
+          
+</div>
 
-                        <div class="controls">
-                            <input name="title" id="edit-title" type="text" ng-model="data.grupo_descripcion"/>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="edit-url">Imagen</label>
 
-                        <div class="controls">
-                            <input name="url" id="edit-url" type="text"  ng-model="data.grupo_descripcion" required/>
-                        </div>
+ <div class="modal fade" id="bookmarkModal" tabindex="-1" role="dialog" >
+        <div class="modal-dialog">
+          <div class="modal-content"   ng-repeat="data in customer">
+              <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              </div>
+
+               <div class="modal-body">              
+                <p>Agregar Grupos</p>
+                <div class="form-group">
+                
+                  <label for="title">Grupo</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
                     </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-warning"><i class="icon-edit icon-white"></i> Edit</button>
+                   <input type="text" id="grupo" ng-model="data.grupo_descripcion"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="url">Imagen</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
                     </div>
-                </fieldset>
-            </form>
-            </div>
+                    <input type="text" id="imagen" ng-model="data.grupo_imagen"/>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" ng-click="editGrupos(data.id,grupo,imagen)">Guardar Cambios</button>
+       
+              </div>
         </div>
-        </div>
+      </div>
+      </div> 
+
 </div>
