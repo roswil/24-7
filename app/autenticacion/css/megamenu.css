@@ -1,11 +1,11 @@
 .megamenu.navbar-default {
-  background-color: #000;
+  /*background-color: #000;*/
 }
 .megamenu .grid-demo {
   padding: 10px 30px;
 }
 .megamenu .dropdown:hover{
-    background-color: #fff;
+    /*background-color: #fff;*/
   }
 .megamenu .dropdown:hover .dropdown-menu {
     display: block;
@@ -32,7 +32,7 @@
   top:auto;
 }
 .megamenu .megamenu-content {
-  padding: 20px 30px;
+  **padding: 20px 30px;
 }
 .megamenu .dropdown.megamenu-fw .dropdown-menu {
   left: 0;
