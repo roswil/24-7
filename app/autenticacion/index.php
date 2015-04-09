@@ -57,7 +57,10 @@
         </div>
       </div>
     </div>
-    </div>    
+    </div> 
+
+	  <a href="#administracion|usuarios">opcion ejemplo</a>
+	
     <footer class="footer">
       <div >
         <div class="container" style="margin-top:20px;">

@@ -69,20 +69,23 @@ app.config(['$routeProvider',
     });
 	
 function PagesController($scope, $http, $route, $routeParams, $compile) {
-	console.log($routeParams);
-
-    $route.current.templateUrl = 'partials/' + $routeParams.name + ".html";
+	
+	var cadena = $routeParams.name;
+	var res = cadena.split("|");
+	
+	var carpeta = res[0];
+	var archivo = res[1];
+	
+	var direccion = "../"+carpeta+"/"+archivo+".html";
+  
+	 $route.current.templateUrl = direccion;
 
     $http.get($route.current.templateUrl).then(function(msg) {
         $('#ng-view').html($compile(msg.data)($scope));
-    });
-	
-	
+    });	
 }
 
 PagesController.$inject = ['$scope', '$http', '$route', '$routeParams', '$compile'];
-	
-
 
 app.factory("services", ['$http', function($http) {
   var serviceBase = '../../model/administracion/usuarios.php/'
