@@ -71,12 +71,12 @@ app.config(['$routeProvider',
 function PagesController($scope, $http, $route, $routeParams, $compile) {
 	
 	var cadena = $routeParams.name;
-	var res = cadena.split("|");
 	
-	var carpeta = res[0];
-	var archivo = res[1];
+	var res = cadena.replace(/\|/g, "/"); 
 	
-	var direccion = "../"+carpeta+"/"+archivo+".html";
+	console.log(cadena);
+	console.log(res);
+	var direccion = "../"+res;
   
 	 $route.current.templateUrl = direccion;
 
