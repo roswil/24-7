@@ -27,6 +27,10 @@ CREATE TABLE _bp_grupos(
 INSERT INTO _bp_grupos (grupo, imagen, _id_usuario, _estado) VALUES ('ACCESO', '', 1, 'A');
 INSERT INTO _bp_grupos (grupo, imagen, _id_usuario, _estado) VALUES ('SEGURIDAD', '', 1, 'A');
 INSERT INTO _bp_grupos (grupo, imagen, _id_usuario, _estado) VALUES ('GENERAL', '', 1, 'A');
+--
+-- grillas de ejemplo
+--
+INSERT INTO _bp_grupos (grupo, imagen, _id_usuario, _estado) VALUES ('GRILLAS', '', 1, 'A');
 
 
 CREATE TABLE _bp_opciones(
@@ -59,6 +63,14 @@ INSERT INTO _bp_opciones (id_grupo, opcion, contenido, adicional, orden, imagen,
 INSERT INTO _bp_opciones (id_grupo, opcion, contenido, adicional, orden, imagen, _id_usuario, _estado) VALUES (3, 'Admin. Ubicaciones Geográficas', 'app_lite/UbicacionesGeograficas/', '', 20, '', 1, 'A');
 INSERT INTO _bp_opciones (id_grupo, opcion, contenido, adicional, orden, imagen, _id_usuario, _estado) VALUES (3, 'Admin. Ubicaciones Orgánicas', 'app_lite/UbicacionesOrganicas/', '', 30, '', 1, 'A');
 
+--
+-- grillas de ejemplo
+--
+INSERT INTO _bp_opciones (id_grupo, opcion, contenido, adicional, orden, imagen, _id_usuario, _estado) VALUES (4, 'Usuarios', '../administracion/usuarios.html', '', 10, '', 1, 'A');
+INSERT INTO _bp_opciones (id_grupo, opcion, contenido, adicional, orden, imagen, _id_usuario, _estado) VALUES (4, 'Personas', '../administracion/personas.html', '', 20, '', 1, 'A');
+INSERT INTO _bp_opciones (id_grupo, opcion, contenido, adicional, orden, imagen, _id_usuario, _estado) VALUES (4, 'Roles', '../administracion/roles.html', '', 30, '', 1, 'A');
+
+
 
 CREATE TABLE _bp_accesos(
 	id_acceso serial PRIMARY KEY,
@@ -82,7 +94,12 @@ INSERT INTO _bp_accesos (id_opcion, id_rol, _id_usuario, _estado) VALUES (9, 1, 
 INSERT INTO _bp_accesos (id_opcion, id_rol, _id_usuario, _estado) VALUES (10, 1, 1, 'A');
 INSERT INTO _bp_accesos (id_opcion, id_rol, _id_usuario, _estado) VALUES (11, 1, 1, 'A');
 INSERT INTO _bp_accesos (id_opcion, id_rol, _id_usuario, _estado) VALUES (12, 1, 1, 'A');
-
+--
+-- grillas de ejemplo
+--
+INSERT INTO _bp_accesos (id_opcion, id_rol, _id_usuario, _estado) VALUES (13, 1, 1, 'A');
+INSERT INTO _bp_accesos (id_opcion, id_rol, _id_usuario, _estado) VALUES (14, 1, 1, 'A');
+INSERT INTO _bp_accesos (id_opcion, id_rol, _id_usuario, _estado) VALUES (15, 1, 1, 'A');
 
 CREATE TABLE _bp_estados_civiles (
 	id_estado_civil serial PRIMARY KEY,

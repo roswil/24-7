@@ -46,7 +46,7 @@
                 <div class="row">
                 <div class="col-sm-3" ng-repeat="c in p.sub_categories">
                   <!--<a href="#/angular/{{c.id_grupo}}/{{c.description}}">{{c.opcion}}-->
-                  <a href="#menu" id="{{c.contenido}}">{{c.opcion}}</a>
+                  <a href="#{{c.id_opcion}}" id="{{c.contenido}}">{{c.opcion}}</a>
                 </div>                   
                 </div>
               </li>

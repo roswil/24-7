@@ -9,7 +9,8 @@ app.controller("NavCtrl",function($scope,$http){
 
 app.config(['$routeProvider',
   function ($routeProvider) {
-        $ruta = '../autenticacion/index.html';
+        $default = '../autenticacion/index.html';
+        //$ruta = '../administracion/usuarios.html';        
         $routeProvider.
         when('/login', {
             title: 'Login',
@@ -38,11 +39,24 @@ app.config(['$routeProvider',
                 role: '0'
             })
             .when('/menu', {
-			     templateUrl	: $ruta,
+			     templateUrl: $default,
+                controller: 'authCtrl'
+		      })        
+            .when('/13', {
+			     templateUrl: "../administracion/usuarios.html",
                 controller: 'authCtrl'
 		      })
-            .otherwise({
-                redirectTo: '/login'
+            .when('/14', {
+			     templateUrl: "../administracion/usuarios.html",
+                controller: 'authCtrl'
+		      })
+            .when('/15', {
+			    templateUrl: "../administracion/usuarios.html",
+                controller: 'authCtrl'
+		      })
+            .otherwise({                
+                //redirectTo: '/login'
+                templateUrl: $default
             });
   }])
     .run(function ($rootScope, $location, Data) {
@@ -65,3 +79,36 @@ app.config(['$routeProvider',
             });
         });
     });
+
+
+app.factory("services", ['$http', function($http) {
+  var serviceBase = '../../model/administracion/usuarios.php/'
+    var obj = {};
+    obj.getUsuarios = function(){
+        return $http.get(serviceBase + 'listaUsuarios');
+    };
+    return obj;   
+}]);
+
+app.controller('listCtrl', function ($scope,services) {
+    services.getUsuarios().then(function(data){
+        $scope.usuarios = data.data;
+        $scope.currentPage = 1; //current page
+        $scope.entryLimit = 5; //max no of items to display in a page
+        $scope.filteredItems = $scope.usuarios.length; //Initially for no filter
+        $scope.totalItems = $scope.usuarios.length;
+    });
+    
+    $scope.setPage = function(pageNo) {
+      $scope.currentPage = pageNo;
+    };
+    $scope.filter = function() {
+      $timeout(function() {
+        $scope.filteredItems = $scope.filtered.length;
+      }, 10);
+    };
+    $scope.sort_by = function(predicate) {
+      $scope.predicate = predicate;
+      $scope.reverse = $scope.reverse;
+    };
+});
