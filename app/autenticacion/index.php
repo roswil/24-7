@@ -49,7 +49,7 @@
             <span class="caret"></span></a>
               <ul class="dropdown-menu"  role="menu">
               <li ng-repeat="c in p.sub_categories">
-                  <a href="#{{c.id_opcion}}" id="{{c.contenido}}">{{c.opcion}}</a>
+                  <a href="#rutaDinamica|{{c.contenido}}">{{c.opcion}}</a>
               </li>
               </ul>
             </li>

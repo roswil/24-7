@@ -21,6 +21,12 @@ $slim_app->get('/categories','categories');
 
 $slim_app->run();
 
+function reemplazarUrl($url){    
+    $url = str_replace("../","",$url);
+    $url = str_replace("/","|",$url);
+    return ($url);
+}
+
 function isLogin() {
 	session_start();
 	if(isset($_SESSION['username']) && !empty($_SESSION['username']))
@@ -231,7 +237,7 @@ function categories() {
 	        	$subcat = array(); // temp array
 	            $subcat["id_opcion"] = $srow['id_opcion'];
 	            $subcat["opcion"] = $srow['opcion'];
-                $subcat["contenido"] = $srow['contenido'];
+                $subcat["contenido"] = reemplazarUrl($srow['contenido']);
 	            // pushing sub category into subcategories node
 	            array_push($category["sub_categories"], $subcat);
 	        }
