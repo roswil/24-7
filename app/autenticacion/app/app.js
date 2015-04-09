@@ -38,22 +38,10 @@ app.config(['$routeProvider',
                 controller: 'authCtrl',
                 role: '0'
             })
-            .when('/menu', {
-			     templateUrl: $default,
-                controller: 'authCtrl'
-		      })        
-            .when('/13', {
-			     templateUrl: "../administracion/usuarios.html",
-                controller: 'authCtrl'
-		      })
-            .when('/14', {
-			     templateUrl: "../administracion/usuarios.html",
-                controller: 'authCtrl'
-		      })
-            .when('/15', {
-			    templateUrl: "../administracion/usuarios.html",
-                controller: 'authCtrl'
-		      })
+			.when('/:name', {
+                    templateUrl: 'partials/blank.html',
+                    controller: PagesController
+                }) 
             .otherwise({                
                 //redirectTo: '/login'
                 templateUrl: $default
@@ -79,6 +67,21 @@ app.config(['$routeProvider',
             });
         });
     });
+	
+function PagesController($scope, $http, $route, $routeParams, $compile) {
+	console.log($routeParams);
+
+    $route.current.templateUrl = 'partials/' + $routeParams.name + ".html";
+
+    $http.get($route.current.templateUrl).then(function(msg) {
+        $('#ng-view').html($compile(msg.data)($scope));
+    });
+	
+	
+}
+
+PagesController.$inject = ['$scope', '$http', '$route', '$routeParams', '$compile'];
+	
 
 
 app.factory("services", ['$http', function($http) {
