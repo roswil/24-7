@@ -1,0 +1,181 @@
+ <h4 class="blog-post-title">Lista de Canes</h4>
+ <hr/>
+<a href="#"  class="btn btn-danger fa fa-plus" data-toggle="modal" data-target="#bookmarkModal"> Adicionar</a>
+<div class="table-responsive">
+<div class="panel panel-primary">
+<div class="panel-heading">Canes		
+	<div class="sw-search" >
+		<div class="nav-search" id="nav-search">
+		Busqueda:
+			<span class="input-icon">
+				<input placeholder="Buscar Canes ..." class="nav-search-input" ng-model="filterProduct" ng-change="resetLimit();"  autocomplete="off" type="text" style="width:300px;" focus>
+                <i class="search-icon fa fa-search nav-search-icon"></i>
+			
+			</span>			
+		</div>	
+	</div>
+</div>
+<div class="panel-body">
+	<table class="table table-striped table-bordered">
+		<thead>
+			<th>Nro.chip/Codigo</th>
+			<th>Nombre</th>
+			<th>Especie</th>
+			<th>Raza</th>
+			<th>Sexo</th>
+			<th>Color</th>
+			<th>Descripcion</th>
+			<th>Fecha de nacimiento</th>       
+			<th>Accion</th>		
+		</thead>
+		<tbody>
+			<tr ng-repeat="data in customersCan | filter:filterProduct | orderBy:'-id'" id="{{data.ANIMAL_CHIP_ID}}" animate-on-change='data.ANIMAL_NOMBRE + data.ANIMAL_NOMBRE +  data.ANIMAL_ESPECIE' ng-animate=" 'animate'">
+			 <td>{{data.ANIMAL_CHIP_ID}}</td>
+             <td>{{data.ANIMAL_NOMBRE}}</td>
+             <td>{{data.ANIMAL_ESPECIE}}</td>
+             <td>{{data.ANIMAL_RAZA}}</td>
+             <td>{{data.ANIMAL_SEXO}}</td>
+             <td>{{data.ANIMAL_COLOR}}</td>
+             <td>{{data.ANIMAL_PELAJE}}</td>
+             <td>{{data.ANIMAL_DESCRIPCION}}</td>
+             <td>{{data.ANIMAL_NACIMIENTO}}</td>
+			 <td>
+				<button class="btn" >Dar de Baja</button>
+			 </td>
+			 <td style="width:100px">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default fa fa-edit" ng-click="obtUsuario(data.id); " data-toggle="modal" data-target="#bookmarkModal"></button>
+					<button type="button" class="btn btn-danger fa fa-trash-o" ng-click="deleteProduct(c);"></button>
+				</div>
+			</td>			
+			</tr>		
+		</tbody>
+	</table>
+</div>
+</div>
+</div>
+
+<!-- Bookmark form -->
+      <div class="modal fade" id="bookmarkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="myModalLabel">Agregar Animal</h4>
+            </div>
+            <div class="modal-body">              
+              <form id="bookmarkForm">               
+                <div class="form-group">
+                  <label for="id">Nro.chip/Codigo:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="glyphicon glyphicon-bookmark"></i>
+                    </div>
+                    <input  id="idchip" class="form-control" type="text" placeholder="Introdusca Codigo o chip">
+                  </div>
+                </div>
+
+               <div class="form-group">
+                  <label for="name">Nombre:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="glyphicon glyphicon-bookmark"></i>
+                    </div>
+                    <input id="nombre" class="form-control" type="text" placeholder="Introdusca nombre del animal">
+                  </div>
+                </div>
+                
+				<div class="form-group">
+                  <label for="ciudad">Raza:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="glyphicon glyphicon-link"></i>
+                    </div>
+                    <input  id="raza" class="form-control" type="url" placeholder="Introdusca la Raza">
+                  </div>
+                </div>
+				<div class="form-group">
+                  <label for="ciudad">Sexo:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="glyphicon glyphicon-link"></i>
+                    </div>
+                    <input  id="sexo" class="form-control" type="url" placeholder="Introdusca sexo">
+                  </div>
+                </div>
+				<div class="form-group">
+                  <label for="ciudad">Color:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="glyphicon glyphicon-link"></i>
+                    </div>
+                    <input  id="color" class="form-control" type="url" placeholder="Introdusca color">
+                  </div>
+                </div>
+				<div class="form-group">
+                  <label for="ciudad">Descripcion:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="glyphicon glyphicon-link"></i>
+                    </div>
+                    <input  id="descripcion" class="form-control" type="url" placeholder="Introdusca descripcion">
+                  </div>
+                </div>
+				<div class="form-group">
+                  <label for="ciudad">Fecha de nacimiento:</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="glyphicon glyphicon-link"></i>
+                    </div>
+                    <input  id="FechaN" class="form-control" type="url" placeholder="Introdusca fecha de nacimiento">
+                  </div>
+                </div>
+				<!---combo-->
+				 <div class="form-group">
+                  <label for="category">Departamento</label>
+                  <div class="input-group" >
+                    <div class="input-group-addon">
+                      <i class="glyphicon glyphicon-folder-open"></i>
+                    </div>  
+          		   <select id="Departamento" class="form-control" 
+					 ng-change="getProvincias(selecteIdi)"
+					 ng-model="selecteIdi"> 
+					 <option ng-repeat="departamento in ComboCustomersDep" value="{{departamento.id}}">{{departamento.ciudad}}</option>
+					
+					</select> 
+                  </div>
+                </div>
+				
+				 <div class="form-group">
+                  <label for="category">Provincia</label>
+                  <div class="input-group" >
+                    <div class="input-group-addon">
+                      <i class="glyphicon glyphicon-folder-open"></i>
+                    </div> 
+					<select id="Provincia" class="form-control">
+					<option ng-repeat="provincia in ComboCustomersProv" value="{{provincia.id}}">{{provincia.nombre}}</option>
+					</select>
+                  </div>
+                </div>				
+				<!--combo--->				
+				<div class="form-group">
+                  <label for="ciudad">Fecha de nacimiento:</label>
+                  <div class="input-group">
+                   
+                    <input type="checkbox" ng-model="confirmed" ng-change="change()" id="ng-change-example1" />
+					<input type="checkbox" ng-model="confirmed" id="ng-change-example2" />
+					<label for="ng-change-example2">Confirmed</label><br />
+					<tt>debug = {{confirmed}}</tt><br/>
+					<tt>counter = {{counter}}</tt><br/>
+                  </div>
+                </div>
+				
+				</form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+          </div>
+        </div>
+      </div>
