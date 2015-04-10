@@ -1,10 +1,10 @@
 <?php
-include '../db/db.php';
+include_once '../db/db.php';
 require '../../libs/rest/Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 
 $slim_app = new \Slim\Slim();
-
+/*
 $slim_app->post('/doLogin','doLogin');
 $slim_app->get('/isLogin','isLogin');
 $slim_app->get('/logout','logout');
@@ -16,7 +16,7 @@ $slim_app->delete('/deleteUser/:did','deleteUser');
 
 $slim_app->get('/listaGrupos/:id','listaGrupos');
 $slim_app->get('/listarOpciones/:id','listarOpciones');
-
+*/
 $slim_app->get('/categories','categories'); 
 
 $slim_app->run();
@@ -27,6 +27,61 @@ function reemplazarUrl($url){
     return ($url);
 }
 
+function categories() { 
+    $db = getDB('mysql');
+    //$rows = $db->select("categories","category cat_id,parent,description",array('parent'=>0),"ORDER BY description");
+    $sql = "SELECT DISTINCT (gr.id_grupo) as id, gr.grupo 
+                                    FROM _bp_accesos ac   
+                                    INNER JOIN _bp_opciones op ON ac.id_opcion = op.id_opcion
+                                    INNER JOIN _bp_grupos gr ON gr.id_grupo = op.id_grupo
+                                    WHERE ac.id_rol = (SELECT id_usuario_rol FROM _bp_usuarios_roles 
+                                    WHERE id_usuario ='1' ) and ac._estado ='A'";
+	try {
+		$a = array();
+		$stmt = $db->prepare($sql);
+        $stmt->execute($a);
+        $rowss = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$categories  = array();
+		$rows["data"] = $rowss;
+		foreach ($rows["data"] as $row) {
+			$id_grupo = $row["id"];
+			//consulta a grupos
+			$sql2="SELECT distinct op.id_grupo, gr.grupo, op.id_opcion, op.opcion, op.contenido, op.imagen 
+					FROM _bp_accesos ac
+			            INNER JOIN _bp_opciones op  ON ac.id_opcion = op.id_opcion 
+			            INNER JOIN _bp_grupos gr ON gr.id_grupo = op.id_grupo
+			            WHERE ac.id_rol = (	SELECT id_usuario_rol 
+			            FROM _bp_usuarios_roles
+			            WHERE id_usuario_rol = '1') AND ac._estado = 'A' 
+			            and op._estado = 'A' and op.id_grupo=$id_grupo order by gr.grupo";
+			$b = array();
+			$stmts = $db->prepare($sql2);
+	        $stmts->execute($b);
+	        $rowsss = $stmts->fetchAll(PDO::FETCH_ASSOC);
+			$category = array();
+			//$userss = $crs->fetchAll(PDO::FETCH_OBJ);
+			$cr["data"] = $rowsss;
+	        $category["id_grupo"] = $row["id"];
+	        $category["grupo"] = $row["grupo"];
+	        $category["sub_categories"] = array(); // subcategories again an array
+	        foreach ($cr["data"] as $srow) {
+	        	$subcat = array(); // temp array
+	            $subcat["id_opcion"] = $srow['id_opcion'];
+	            $subcat["opcion"] = $srow['opcion'];
+                $subcat["contenido"] = reemplazarUrl($srow['contenido']);
+	            // pushing sub category into subcategories node
+	            array_push($category["sub_categories"], $subcat);
+	        }
+			array_push($categories, $category);
+		}
+		$db = null;
+		echo json_encode($categories);
+	} catch(PDOException $e) {
+	    echo '{"error":{"text":'. $e->getMessage() .'}}'; 
+	}
+}
+
+/*
 function isLogin() {
 	session_start();
 	if(isset($_SESSION['username']) && !empty($_SESSION['username']))
@@ -190,67 +245,7 @@ function listarOpciones($id) {
 	    echo '{"error":{"text":'. $e->getMessage() .'}}'; 
 	}
 }
-function categories() { 
-    $db = getDB('mysql');
-    //$rows = $db->select("categories","category cat_id,parent,description",array('parent'=>0),"ORDER BY description");
-    $sql = "SELECT DISTINCT (gr.id_grupo) as id, gr.grupo 
-                                    FROM _bp_accesos ac   
-                                    INNER JOIN _bp_opciones op ON ac.id_opcion = op.id_opcion
-                                    INNER JOIN _bp_grupos gr ON gr.id_grupo = op.id_grupo
-                                    WHERE ac.id_rol = (SELECT id_usuario_rol FROM _bp_usuarios_roles 
-                                    WHERE id_usuario ='1' ) and ac._estado ='A'";
-	
-	try {
-		$db = getDB('mysql');
-		$a = array();
-		$stmt = $db->prepare($sql);
-        $stmt->execute($a);
-        $rowss = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		$categories  = array();
-		//$categories="{aa,bb,cc}";
-		//$users = $stmt->fetchAll(PDO::FETCH_OBJ);
-		$rows["data"] = $rowss;
-		//$rows["data"] = $stmt->fetchAll(PDO::FETCH_OBJ);
-		foreach ($rows["data"] as $row) {
-			//printf($rows);
-			$id_grupo = $row["id"];
-			//consulta a grupos
-			$sql2="SELECT distinct op.id_grupo, gr.grupo, op.id_opcion, op.opcion, op.contenido, op.imagen 
-					FROM _bp_accesos ac
-			            INNER JOIN _bp_opciones op  ON ac.id_opcion = op.id_opcion 
-			            INNER JOIN _bp_grupos gr ON gr.id_grupo = op.id_grupo
-			            WHERE ac.id_rol = (	SELECT id_usuario_rol 
-			            FROM _bp_usuarios_roles
-			            WHERE id_usuario_rol = '1') AND ac._estado = 'A' 
-			            and op._estado = 'A' and op.id_grupo=$id_grupo order by gr.grupo";
-			$b = array();
-			$stmts = $db->prepare($sql2);
-	        $stmts->execute($b);
-	        $rowsss = $stmts->fetchAll(PDO::FETCH_ASSOC);
-			$category = array();
-			//$userss = $crs->fetchAll(PDO::FETCH_OBJ);
-			$cr["data"] = $rowsss;
-	        $category["id_grupo"] = $row["id"];
-	        $category["grupo"] = $row["grupo"];
-	        $category["sub_categories"] = array(); // subcategories again an array
-	        foreach ($cr["data"] as $srow) {
-	        	$subcat = array(); // temp array
-	            $subcat["id_opcion"] = $srow['id_opcion'];
-	            $subcat["opcion"] = $srow['opcion'];
-                $subcat["contenido"] = reemplazarUrl($srow['contenido']);
-	            // pushing sub category into subcategories node
-	            array_push($category["sub_categories"], $subcat);
-	        }
-			array_push($categories, $category);
-		}
-		$db = null;
-		//echo json_encode($category,JSON_NUMERIC_CHECK);
-		//echoResponse(200,$category);
-		
-		echo json_encode($categories);
-		//echo json_encode($users,JSON_NUMERIC_CHECK);
-	} catch(PDOException $e) {
-	    echo '{"error":{"text":'. $e->getMessage() .'}}'; 
-	}
-}
+*/
+
+
 ?>

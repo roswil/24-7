@@ -2,7 +2,7 @@
 
 require_once 'dbHandler.php';
 require_once 'passwordHash.php';
-require '.././libs/Slim/Slim.php';
+require '../../libs/rest/Slim/Slim.php';
 
 \Slim\Slim::registerAutoloader();
 
